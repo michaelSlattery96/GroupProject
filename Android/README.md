@@ -1,1 +1,3 @@
-App Code goes here
+# 3rd Year GroupProject
+
+Put your code in the folder that is your domain.
