@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.softwaredev.groupproject.ProfileActivity">
+
+    <TextView
+        android:id="@+id/Info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="@string/userName"/>
+
+    <TextView
+        android:id="@+id/Age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="@string/age"
+        android:layout_below="@id/Info"/>
+
+    <TextView
+        android:id="@+id/PhoneNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="@string/phoneNo"
+        android:layout_below="@id/Age"/>
+
+    <TextView
+        android:id="@+id/Adress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="@string/address"
+        android:layout_below="@id/PhoneNo"/>
+
+
+</RelativeLayout>
