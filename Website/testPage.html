@@ -1,0 +1,62 @@
+<!DOCRTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Test Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="container">
+			<!-- The h1 "testData" changes based on the "text" field in the database -->
+			<h1 id = "testData"></h1>
+			
+			<div class="page-header">
+			
+			</div>
+			<div class="jumbotron">
+
+				
+				<!--The button calls the "update" function. The names in the form are uploaded to the database. -->
+				<form class="form1">
+				  Username: <input type="text" id="username"><br>
+				  Email:	<input type="email" id="email"><br>
+				  Password: <input type="password" id="password"><br><br>
+				  <button id="formButton" class="btn btn-default" onclick="update()">Submit</button>
+				</form>
+			</div>
+		</div>
+
+
+
+		<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
+		<script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyCQFtUPTxIe0DprJFRb5JLtU_qGFF7UNS4",
+                authDomain: "rd-year-group-project.firebaseapp.com",
+                databaseURL: "https://rd-year-group-project.firebaseio.com",
+                projectId: "rd-year-group-project",
+                storageBucket: "rd-year-group-project.appspot.com",
+                messagingSenderId: "448574028"
+            };
+            firebase.initializeApp(config);
+
+
+		     var bigOne = document.getElementById('testData');
+		     var dbref = firebase.database().ref().child('text');
+		     dbref.on('value', snap => bigOne.innerText = snap.val());
+
+             function update()
+              {
+                var name = document.getElementById("username").value;
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+
+                firebase.database().ref('users/' + name).set({
+                    email: email,
+                    password: password
+                });
+              }
+		</script>
+	</body>
+</html>
