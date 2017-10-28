@@ -42,7 +42,7 @@
             var password = document.getElementById("password").value;
 			var username = 'users/' + name + phone;  
 
-			dataRef.child(username).push({
+			dataRef.child(username).set({
                     email: email,
                     password: password,
 					name: name,
