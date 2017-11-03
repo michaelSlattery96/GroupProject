@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Login Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<style>	
+		body {
+			 background-image: url("cogs.jpeg");
+		}
+	
+        button {
+            background-color: #77c8ff;
+        }
+        
+        label, input {
+            display: block;
+        }
+		
+		input {
+			width: 15em;
+		}
+
+        label {
+            margin-bottom: 20px;
+        }
+        
+        .jumbotron{
+            border: 1px solid black;
+            background-color: white;
+			width: 40em;
+			padding-left: 2em;	
+        }
+		
+		.container {
+			padding: 150px;
+		}
+        
+    </style>
+	</head>
+	<body>
+		<div class="container" align="center">
+			
+			<div class="jumbotron container-fluid" align="left">
+                <!-- The h1 "testData" changes based on the "text" field in the database -->
+                <h1>Sign In</h1>
+				
+				<!--The button calls the "update" function. The names in the form are uploaded to the database. -->
+                    <form class="form1">
+                        <label>
+                            UserName
+                            <input type="text" id="userName">
+                        </label>
+                        <label>
+                            Password 
+                            <input type="password" id="password"><br>
+                        </label>
+                        <!-- Geotagging: <input type="radio" name="test" id="test" value="yes"> Yes -->
+                        <!-- <input type="radio" name="test" id="test" value="no"> No<br> -->
+                        <button id="formButton" class="btn btn-default" onclick="return signIn()">Sign In</button>
+                    </form>
+			</div>
+		</div>
+
+		<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+		<script>
+			var dataRef = new Firebase('https://rd-year-group-project.firebaseio.com');
+			
+			function signIn(){
+
+				var userName = document.getElementById("userName").value;
+				var password = document.getElementById("password").value;
+				var correctUser = false;
+				var correctPass = false;
+
+				var userNameRef = dataRef.child("users").ref();
+				userNameRef.on("child_added", function(snapshot) {
+					snapshot.forEach(function(childSnapshot) {
+						var childData = snapshot.key();
+						if(childData == userName){
+							correctUser = true;
+						}
+					});
+				});
+
+				var passwordRef = dataRef.child("users").ref();
+				passwordRef.on("child_added", function(snapshot) {
+					snapshot.forEach(function(childSnapshot) {
+						var childData = childSnapshot.val();
+						if(childData == password && childSnapshot.key() == "password" && correctUser == true){
+							document.location.href = "yVer.html";
+						}
+					});
+				});
+
+				return correctPass;
+			}
+			
+			
+		</script>
+		<!--
+		The following code is not implemented yet but will be helpful for logging in
+		// For user authentication
+		function authHandler(error, authData) {
+		if (error) {
+		console.log('Login Failed!', error);
+		} else {
+		}
+		}
+
+		// Log the user in with an email combination
+		dataRef.authWithPassword({
+			email    : 'mail@mail.com',
+			password : 'pass'
+			}, authHandler);
+
+		dataRef.onAuth(function(authData) {
+		userId = authData.uid;
+		});
+		-->
+		
+	</body>
+</html>
