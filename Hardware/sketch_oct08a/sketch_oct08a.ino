@@ -3,6 +3,7 @@
 #define INCLUDE_GPS_SHIELD
 #define INCLUDE_VOICE_RECOGNIZER_SHIELD
 #define INCLUDE_TERMINAL_SHIELD
+#define INCLUDE_TEXT_TO_SPEECH_SHIELD
  
 #include <OneSheeld.h>
 //Code to put longitude and latitude to firebase
@@ -11,16 +12,22 @@ HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.j
 
 //Variables
 char myBuffer[10];
-int ledPin = 13;
-const char onCommand[] = "on";
-const char offCommand[] = "off";
+int lightLedPin = 13;
+int heatLedPin = 8;
+int heatGndPin = 9;
+const char lightsOnCommand[] = "lights on";
+const char lightsOffCommand[] = "lights off";
+const char heatingOnCommand[] = "heating on";
+const char heatingOffCommand[] = "heating off";
  
 void setup() {
   // put your setup code here, to run once:
   OneSheeld.begin();
 
-  //Set the LED pin as OUTPUT
-  pinMode(ledPin,OUTPUT);
+  //Set the pins as OUTPUT
+  pinMode(lightLedPin,OUTPUT);
+  pinMode(heatLedPin,OUTPUT);
+  pinMode(heatGndPin,OUTPUT);
 
   //Error handling for voice recognition
   VoiceRecognition.setOnError(error);
@@ -30,15 +37,27 @@ void setup() {
  
 void loop() {
   // put your main code here, to run repeatedly
-
+  
   //Voice Recognition Section
   if(VoiceRecognition.isNewCommandReceived()) {
-    if(!strcmp(onCommand,VoiceRecognition.getLastCommand())) {
+    //makes pin 9 act as a GND pin
+    digitalWrite(heatGndPin,LOW);
+    if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {
       /* Turn on the LED. */
-      digitalWrite(ledPin,MEDIUM);
-    } else if (!strcmp(offCommand,VoiceRecognition.getLastCommand())) {
+      digitalWrite(lightLedPin,HIGH);
+      TextToSpeech.say("Lights are on");
+    } else if (!strcmp(lightsOffCommand,VoiceRecognition.getLastCommand())) {
       /* Turn off the LED. */
-      digitalWrite(ledPin,LOW);
+      digitalWrite(lightLedPin,LOW);
+      TextToSpeech.say("Lights are off");
+    }
+
+    if(!strcmp(heatingOnCommand,VoiceRecognition.getLastCommand())) {
+      digitalWrite(heatLedPin,HIGH);
+      TextToSpeech.say("Heating is on");
+    } else if (!strcmp(heatingOffCommand,VoiceRecognition.getLastCommand())) {
+      digitalWrite(heatLedPin,LOW);
+      TextToSpeech.say("Heating is off");
     }
   }
   
@@ -49,7 +68,7 @@ void loop() {
   myRequest2.addRawData(itoa(longitude,myBuffer,10));
   Internet.performPut(myRequest1);
   Internet.performPut(myRequest2);
-  //Causes bug where led won't light up
+  //Causes bug where led won't light up until delay is over
   //OneSheeld.delay(5000);
   
 }
