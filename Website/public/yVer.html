@@ -27,17 +27,18 @@
 			var phoneNo;
 			var name;
 			var array = [];
-			var tabBody=document.getElementsByTagName("tbody").item(0);
 			
 			function load(){
 				var tableRef = dataRef.child("users/Patients").ref();
-					tableRef.on("value", function(snapshot) {
+					tableRef.on("child_added", function(snapshot) {
 						snapshot.forEach(function(childSnapshot){
-							var userNameRef = dataRef.child("users/Patients/" + snapshot.key()).ref();
-								userNameRef.on("child_added", function(snapshot1) {
+							var patientRef = dataRef.child("users/Patients").ref();
+								patientRef.on("value", function(snapshot1) {
 									snapshot.forEach(function(childSnapshot1) {
 										var childData = childSnapshot1.key();
+										console.log(childSnapshot1.key());
 										if(childData == "Address"){
+											
 											address = childSnapshot1.val();
 										}
 										if(childData == "Carer name"){
@@ -57,47 +58,45 @@
 										}
 								});
 							});
-														
-							row=document.createElement("tr");
-							cell1 = document.createElement("td");
-							cell2 = document.createElement("td");
-							cell3 = document.createElement("td");
-							cell4 = document.createElement("td");
-							cell5 = document.createElement("td");
-							cell6 = document.createElement("td");
-							textnode1=document.createTextNode(address);
-							textnode2=document.createTextNode(carerName);
-							textnode3=document.createTextNode(carerId);
-							textnode4=document.createTextNode(dob);
-							textnode5=document.createTextNode(phoneNo);
-							textnode6=document.createTextNode(name);
-							cell1.appendChild(textnode1);
-							cell2.appendChild(textnode2);
-							cell3.appendChild(textnode3);
-							cell4.appendChild(textnode4);
-							cell5.appendChild(textnode5);
-							cell6.appendChild(textnode6);
-							row.appendChild(cell1);
-							row.appendChild(cell2);
-							row.appendChild(cell3);
-							row.appendChild(cell4);
-							row.appendChild(cell5);
-							row.appendChild(cell6);
-							console.log(row);
-							array.push(row);
 						});
+							row=document.createElement("tr");
+							addressCell = document.createElement("td");
+							carerNameCell = document.createElement("td");
+							carerIDCell = document.createElement("td");
+							DOBCell = document.createElement("td");
+							phoneNoCell = document.createElement("td");
+							nameCell = document.createElement("td");
+							addressText=document.createTextNode(address);
+							carerNameText=document.createTextNode(carerName);
+							careIDText=document.createTextNode(carerId);
+							DOBText=document.createTextNode(dob);
+							phoneNoText=document.createTextNode(phoneNo);
+							nameText=document.createTextNode(name);
+							addressCell.appendChild(addressText);
+							carerNameCell.appendChild(carerNameText);
+							carerIDCell.appendChild(careIDText);
+							DOBCell.appendChild(DOBText);
+							phoneNoCell.appendChild(phoneNoText);
+							nameCell.appendChild(nameText);
+							row.appendChild(addressCell);
+							row.appendChild(carerNameCell);
+							row.appendChild(carerIDCell);
+							row.appendChild(DOBCell);
+							row.appendChild(phoneNoCell);
+							row.appendChild(nameCell);
+							array.push(row);
 					});
 					
 			}
 			
 			window.onload = function check(){
 				load();
+				tabBody=document.getElementsByTagName("tbody").item(0);
 				setTimeout(function(){
 					for(i = 0; i < array.length; i++){
-						console.log(array[i]);
 						tabBody.appendChild(array[i]);
 					}
-				}, 5000);
+				}, 1000);
 			}
 		</script>
 	</head>
