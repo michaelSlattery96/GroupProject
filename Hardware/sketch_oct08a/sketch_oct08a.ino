@@ -130,6 +130,7 @@ void loop() {
   if(VoiceRecognition.isNewCommandReceived()){
       //makes pin 9 act as a GND pin
       digitalWrite(heatGndPin,LOW);
+
       if(!gameOn){
     		if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {  
     		  /* Turn on the LED. */
@@ -173,6 +174,7 @@ void loop() {
       			alreadyEntered = false;
       			int i;
             gameOn = false;
+
       			for(i = 0; i < 3; i++){
       			  alreadyDone[i] = -1;
       			}     
@@ -237,7 +239,6 @@ void onResponseError(int errorNumber)
     case REQUEST_HAS_NO_RESPONSE: Terminal.println("REQUEST_HAS_NO_RESPONSE"); break;
     case SIZE_OF_REQUEST_CAN_NOT_BE_ZERO: Terminal.println("SIZE_OF_REQUEST_CAN_NOT_BE_ZERO"); break;
     case UNSUPPORTED_HTTP_ENTITY: Terminal.println("UNSUPPORTED_HTTP_ENTITY"); break;
-    case JSON_KEYCHAIN_IS_WRONG: Terminal.println(errorNumber); break;
+    case JSON_KEYCHAIN_IS_WRONG: Terminal.println("JSON_KEYCHAIN_IS_WRONG"); break;
   }
 }
-
