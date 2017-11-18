@@ -1,6 +1,7 @@
 #define CUSTOM_SETTINGS
 #define INCLUDE_INTERNET_SHIELD
 #define INCLUDE_GPS_SHIELD
+#define INCLUDE_PHONE_SHIELD
 #define INCLUDE_VOICE_RECOGNIZER_SHIELD
 #define INCLUDE_TERMINAL_SHIELD
 #define INCLUDE_TEXT_TO_SPEECH_SHIELD
@@ -25,7 +26,7 @@ const char lightsOffCommand[] = "lights off";
 const char heatingOnCommand[] = "heating on";
 const char heatingOffCommand[] = "heating off";
 char gameEasy[MAX] = "game on";
-int lightOnApp;
+int lightOnApp = -1;
 int r;
 boolean alreadyEntered = false;
 boolean gameOn = false;
@@ -102,10 +103,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly
 
-  lightsRequest.setOnSuccess(&findLight);
-  lightsRequest.getResponse().setOnJsonResponse(&turnOnLight);
-  lightsRequest.getResponse().setOnError(&onResponseError);
-  Internet.performGet(lightsRequest);
+  turnOnLight();
   delay(2000);
 
   //Terminal.println(lightOnApp);
@@ -122,18 +120,18 @@ void loop() {
   //Internet.performGet(myRequest3);
  // delay(2000);
 
-  if(gameStart == 1){
+ /* if(gameStart == 1){
     VoiceRecognition.start();
     myRequest4.addRawData("0");
     Internet.performPut(myRequest4);
-  }
+  }*/
 
   //Voice Recognition Section
   if(VoiceRecognition.isNewCommandReceived()){
       //makes pin 9 act as a GND pin
       digitalWrite(heatGndPin,LOW);
-      if(!strcmp("game on",VoiceRecognition.getLastCommand()) && !gameOn){
-    		if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {
+      if(!gameOn){
+    		if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {  
     		  /* Turn on the LED. */
     		  digitalWrite(lightLedPin,HIGH);
     		  TextToSpeech.say("Lights are on");
@@ -152,11 +150,17 @@ void loop() {
     		  TextToSpeech.say("Heating is off");
     		}
 
+          Terminal.println("Enter1");
+        if(!strcmp("call",VoiceRecognition.getLastCommand())) {
+          Terminal.println("Enter2");
+          Phone.call("0873845770");
+        }
+
         if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())){
           current++;
+          gameOn = true;
           easy();
         }
-        gameOn = true;
         
       } else if(gameOn) {
         if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())) {
@@ -168,6 +172,7 @@ void loop() {
       			current = -1;
       			alreadyEntered = false;
       			int i;
+            gameOn = false;
       			for(i = 0; i < 3; i++){
       			  alreadyDone[i] = -1;
       			}     
@@ -192,24 +197,30 @@ void loop() {
   
 }
 
-void successFunction(HttpResponse & myResponse){
+void turnOnLight(){
+  lightsRequest.setOnSuccess(&findLight);
+  lightsRequest.getResponse().setOnJsonResponse(&getValueOfJson);
+  lightsRequest.getResponse().setOnError(&onResponseError);
+  Internet.performGet(lightsRequest);
+}
+
+/*void successFunction(HttpResponse & myResponse){
   myResponse["Game"].query();
 }
 
 void jsonResponseFunction(JsonKeyChain & key, char * value){
   gameStart = atoi(value);
-}
+}*/
 
 void findLight(HttpResponse & myResponse){
   myResponse["Lights"].query();
-  //Terminal.println(3);
+  //The status code is 200 meaning the response was succesful
+  Terminal.println(myResponse.getStatusCode());
 }
 
-void turnOnLight(JsonKeyChain & key, char * value){
-  //Terminal.println("Before: ");
-  //Terminal.println(value);
-  lightOnApp= atoi(value);
-  //Terminal.println("After: ");
+void getValueOfJson(JsonKeyChain & key, char * value){  
+  Terminal.println(value);
+  //lightOnApp= atoi(value);
   //Terminal.println(lightOnApp);
 }
 
@@ -226,7 +237,7 @@ void onResponseError(int errorNumber)
     case REQUEST_HAS_NO_RESPONSE: Terminal.println("REQUEST_HAS_NO_RESPONSE"); break;
     case SIZE_OF_REQUEST_CAN_NOT_BE_ZERO: Terminal.println("SIZE_OF_REQUEST_CAN_NOT_BE_ZERO"); break;
     case UNSUPPORTED_HTTP_ENTITY: Terminal.println("UNSUPPORTED_HTTP_ENTITY"); break;
-    case JSON_KEYCHAIN_IS_WRONG: Terminal.println("JSON_KEYCHAIN_IS_WRONG"); break;
+    case JSON_KEYCHAIN_IS_WRONG: Terminal.println(errorNumber); break;
   }
 }
 

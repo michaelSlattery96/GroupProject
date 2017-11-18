@@ -4,7 +4,7 @@
     xmlns:design="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.softwaredev.groupproject.MainActivity">
+    tools:context="com.softwaredev.groupproject.patientHomeScreenActivity">
 
         <TextView
             android:id="@+id/dateAndTime"
@@ -169,6 +169,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:id="@+id/homeAuto"
                 android:src="@drawable/security"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"

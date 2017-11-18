@@ -3,49 +3,17 @@
 	<head>
 	<meta charset="utf-8">
 	<title>Login Page</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-	<style>	
-		body {
-			 background-image: url("cogs.jpeg");
-		}
-	
-        button {
-            background-color: #77c8ff;
-        }
-        
-        label, input {
-            display: block;
-        }
-		
-		input {
-			width: 15em;
-		}
-
-        label {
-            margin-bottom: 20px;
-        }
-        
-        .jumbotron{
-            border: 1px solid black;
-            background-color: white;
-			width: 40em;
-			padding-left: 2em;	
-        }
-		
-		.container {
-			padding: 150px;
-		}
-        
-    </style>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Own css link must be under bootstrap for it to take effect. -->
+	<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
 		<div class="container" align="center">
 			
 			<div class="jumbotron container-fluid" align="left">
-                <!-- The h1 "testData" changes based on the "text" field in the database -->
                 <h1>Sign In</h1>
 				
-				<!--The button calls the "update" function. The names in the form are uploaded to the database. -->
+				<!--The button calls the "signIn" function. The values are checked in firebase. -->
                     <form class="form1">
                         <label>
                             UserName
@@ -57,7 +25,8 @@
                         </label>
                         <!-- Geotagging: <input type="radio" name="test" id="test" value="yes"> Yes -->
                         <!-- <input type="radio" name="test" id="test" value="no"> No<br> -->
-                        <button id="formButton" class="btn btn-default" onclick="return signIn()">Sign In</button>
+						<!-- if signIn() returns true sign in to home page.-->
+                        <button id="formButton" onclick="return signIn()">Sign In</button>
                     </form>
 			</div>
 		</div>
@@ -73,9 +42,15 @@
 				var correctUser = false;
 				var correctPass = false;
 
-				var userNameRef = dataRef.child("users").ref();
+				//Checks the user/SystemAdmin table in firebase.
+				//child_added to check children in SystemAdmin.
+				//forEach checks each key in SystemAdmin.
+				
+				var userNameRef = dataRef.child("users/SystemAdmin").ref();
 				userNameRef.on("child_added", function(snapshot) {
 					snapshot.forEach(function(childSnapshot) {
+						//I use snapshot instead of childSnapshot because I only want to find usernames for this part not the values inside the username which is another table.
+						//I also use .key() instead of .val() since I am not interested in the values inside the username table.
 						var childData = snapshot.key();
 						if(childData == userName){
 							correctUser = true;
@@ -83,9 +58,11 @@
 					});
 				});
 
-				var passwordRef = dataRef.child("users").ref();
+				var passwordRef = dataRef.child("users/SystemAdmin").ref();
 				passwordRef.on("child_added", function(snapshot) {
 					snapshot.forEach(function(childSnapshot) {
+						//Use childSnapshot here to check values inside table.
+						//Use .val() to get the value instead of the key.
 						var childData = childSnapshot.val();
 						if(childData == password && childSnapshot.key() == "password" && correctUser == true){
 							document.location.href = "yVer.html";

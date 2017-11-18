@@ -2,36 +2,33 @@ package com.softwaredev.groupproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity{
+public class patientHomeScreenActivity extends AppCompatActivity{
 
     Context myContext = this;
     TextView textView;
+    ImageView homeAuto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Virtual Care Assistant");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_patient_home_screen);
+        homeAuto = (ImageView)findViewById(R.id.homeAuto);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -51,6 +48,14 @@ public class MainActivity extends AppCompatActivity{
                 someHandler.postDelayed(this, 1000);
             }
         }, 10);
+
+        homeAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }

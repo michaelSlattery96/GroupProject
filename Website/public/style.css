@@ -1,0 +1,31 @@
+body {
+	 background-color: #1e4d84;
+}
+
+button {
+	background-color: #77c8ff;
+	border: none;
+}
+
+label, input {
+	display: block;
+}
+
+input {
+	width: 15em;
+}
+
+label {
+	margin-bottom: 20px;
+}
+
+.jumbotron{
+	border: 1px solid black;
+	background-color: white;
+	width: 40em;
+	padding-left: 2em;	
+}
+
+.container {
+	padding: 150px;
+}

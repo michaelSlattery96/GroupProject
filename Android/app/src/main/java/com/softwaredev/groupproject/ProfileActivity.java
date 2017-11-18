@@ -13,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    String TAG = MainActivity.class.getSimpleName();
+    String TAG = patientHomeScreenActivity.class.getSimpleName();
     String value = " ";
 
     @Override
