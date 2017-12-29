@@ -9,11 +9,11 @@
  
 #include <OneSheeld.h>
 //Code to put longitude and latitude to firebase
-//HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/latitude.json");
-//HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.json");
-HttpRequest myRequest3("https://rd-year-group-project.firebaseio.com/1Sheeld.json");
-HttpRequest myRequest4("https://rd-year-group-project.firebaseio.com/1Sheeld/Game.json");
-HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2/Lights.json");
+HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/latitude.json");
+HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.json");
+//HttpRequest myRequest3("https://rd-year-group-project.firebaseio.com/1Sheeld.json");
+//HttpRequest myRequest4("https://rd-year-group-project.firebaseio.com/1Sheeld/Game.json");
+//HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2/Lights.json");
 //HttpRequest heatingRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2.json");
 
 //Variables
@@ -21,6 +21,7 @@ HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Pa
 int lightLedPin = 13;
 int heatLedPin = 8;
 int heatGndPin = 9;
+int gamePin = 7;
 const char lightsOnCommand[] = "lights on";
 const char lightsOffCommand[] = "lights off";
 const char heatingOnCommand[] = "heating on";
@@ -87,7 +88,7 @@ void setup() {
   pinMode(heatGndPin,OUTPUT); 
 
   //GPS Section
- /* char myBuffer[15];
+  char myBuffer[15];
   float latitude = GPS.getLatitude();
   float longitude = GPS.getLongitude();
   dtostrf(latitude, 13, 7, myBuffer);
@@ -95,7 +96,7 @@ void setup() {
   dtostrf(longitude, 13, 7, myBuffer);
   myRequest2.addRawData(myBuffer);
   Internet.performPut(myRequest1);
-  Internet.performPut(myRequest2);*/
+  Internet.performPut(myRequest2);
   //Causes bug where led won't light up until delay is over
   //OneSheeld.delay(5000);
 }
@@ -103,17 +104,17 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly
 
-  turnOnLight();
-  delay(2000);
+  //turnOnLight();
+  //delay(2000);
 
   //Terminal.println(lightOnApp);
-  if(lightOnApp == 1){
+  /*if(lightOnApp == 1){
     //Terminal.println("in on");
     digitalWrite(lightLedPin,HIGH);
   } else {
     //Terminal.println("in off");
     digitalWrite(lightLedPin,LOW);
-  }
+  }*/
   
   //myRequest3.setOnSuccess(&successFunction);
   //myRequest3.getResponse().setOnJsonResponse(&jsonResponseFunction);
@@ -124,6 +125,12 @@ void loop() {
     VoiceRecognition.start();
     myRequest4.addRawData("0");
     Internet.performPut(myRequest4);
+  }*/
+
+  /*if(digitalRead(gamePin) == HIGH){
+    Terminal.println("Entered");
+    VoiceRecognition.start();
+    digitalWrite(gamePin, LOW);
   }*/
 
   //Voice Recognition Section
@@ -151,9 +158,7 @@ void loop() {
     		  TextToSpeech.say("Heating is off");
     		}
 
-          Terminal.println("Enter1");
         if(!strcmp("call",VoiceRecognition.getLastCommand())) {
-          Terminal.println("Enter2");
           Phone.call("0873845770");
         }
 
@@ -199,12 +204,12 @@ void loop() {
   
 }
 
-void turnOnLight(){
+/*void turnOnLight(){
   lightsRequest.setOnSuccess(&findLight);
   lightsRequest.getResponse().setOnJsonResponse(&getValueOfJson);
   lightsRequest.getResponse().setOnError(&onResponseError);
   Internet.performGet(lightsRequest);
-}
+}*/
 
 /*void successFunction(HttpResponse & myResponse){
   myResponse["Game"].query();
@@ -214,7 +219,7 @@ void jsonResponseFunction(JsonKeyChain & key, char * value){
   gameStart = atoi(value);
 }*/
 
-void findLight(HttpResponse & myResponse){
+/*void findLight(HttpResponse & myResponse){
   myResponse["Lights"].query();
   //The status code is 200 meaning the response was succesful
   Terminal.println(myResponse.getStatusCode());
@@ -224,7 +229,7 @@ void getValueOfJson(JsonKeyChain & key, char * value){
   Terminal.println(value);
   //lightOnApp= atoi(value);
   //Terminal.println(lightOnApp);
-}
+}*/
 
 void onResponseError(int errorNumber)
 {

@@ -8,15 +8,27 @@ button {
 }
 
 label, input {
-	display: block;
-}
-
-input {
 	width: 15em;
 }
 
-label {
-	margin-bottom: 20px;
+th{
+	background-color: silver;
+}
+
+table{
+	background-color: #FFFFFF;
+}
+
+i{
+	height: 1.45em;
+}
+
+tr:hover {
+	background-color: #ffff99;
+}
+
+.desc{
+	padding: 1em;
 }
 
 .jumbotron{
@@ -28,4 +40,16 @@ label {
 
 .container {
 	padding: 150px;
+}
+
+.patientOverFlow{
+	height: 600px;
+	overflow: auto;
+}
+.carerOverFlow{
+	height: 200px;
+	overflow: auto;
+}
+.container-full{
+	padding: 1em;
 }

@@ -1,8 +1,15 @@
 package com.softwaredev.groupproject;
 
-/**
- * Created by Michael on 18/11/2017.
- */
+import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
-public class MyApplication {
+public class MyApplication extends Application {
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 }
