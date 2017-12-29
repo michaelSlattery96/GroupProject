@@ -73,11 +73,10 @@ public class CreateAccount extends AppCompatActivity {
                             patients.child("Phone Number").setValue(phoneNo);
                             patients.child("Date of Birth").setValue(dateOfBirth);
                             patients.child("Eircode").setValue(eircode);
-                            patients.child("Lights").setValue("off");
-                            patients.child("Heating").setValue("off");
-                            patients.child("Game").setValue("off");
-
+                            patients.child("patientID").setValue(patientId);
+                            patients.child("Left Geo").setValue("false");
                             Intent mainActivity = new Intent(myContext, patientHomeScreenActivity.class);
+                            mainActivity.putExtra("PATIENT_ID", patientId);
                             myContext.startActivity(mainActivity);
                         }
 

@@ -6,6 +6,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- Own css link must be under bootstrap for it to take effect. -->
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+		label, input {
+			display: block;
+			width: 15em;
+		}
+	</style>
 	</head>
 	<body>
 		<div class="container" align="center">
@@ -65,7 +71,7 @@
 						//Use .val() to get the value instead of the key.
 						var childData = childSnapshot.val();
 						if(childData == password && childSnapshot.key() == "password" && correctUser == true){
-							document.location.href = "yVer.html";
+							document.location.href = "HomePage.html";
 						}
 					});
 				});

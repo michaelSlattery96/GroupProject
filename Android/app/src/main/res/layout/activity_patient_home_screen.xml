@@ -40,22 +40,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar date"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:background="#FFFFFF"
                     android:textStyle="bold"
+                    android:id="@+id/calendarDate1"
                     />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar Entry"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:textSize="15sp"
                     android:background="#FFFFFF"
+                    android:id="@+id/calendarMessage1"
                     />
 
             </TableRow>
@@ -67,22 +67,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar date"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:background="#FFFFFF"
                     android:textStyle="bold"
+                    android:id="@+id/calendarDate2"
                     />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar Entry"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:textSize="15sp"
                     android:background="#FFFFFF"
+                    android:id="@+id/calendarMessage2"
                     />
 
             </TableRow>
@@ -94,46 +94,260 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar date"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:background="#FFFFFF"
                     android:textStyle="bold"
+                    android:id="@+id/calendarDate3"
                     />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Calendar Entry"
                     android:layout_margin="1dp"
                     android:layout_column="0"
                     android:textSize="15sp"
                     android:background="#FFFFFF"
+                    android:id="@+id/calendarMessage3"
                     />
 
             </TableRow>
 
         </TableLayout>
 
+    <TableLayout
+        android:id="@+id/numberTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/table"
+        android:stretchColumns="0,1,2,3"
+        android:gravity="left"
+        android:paddingBottom="20dp">
+        <TableRow
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_margin="1dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Play a memory game\n with VCA!"
-            android:layout_below="@+id/table"
-            android:id="@+id/gameMessage"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Shops"
+            android:layout_margin="1dp"
+            android:layout_column="0"
+            android:textSize="15sp"
+            android:background="#FFFFFF"
+            />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/table"
-            android:layout_alignRight="@id/gameMessage"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Taxis"
+            android:layout_margin="1dp"
+            android:layout_column="0"
+            android:textSize="15sp"
+            android:background="#FFFFFF"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Take-Away"
+            android:layout_margin="1dp"
+            android:layout_column="0"
+            android:textSize="15sp"
+            android:background="#FFFFFF"
+            />
+
+    </TableRow>
+        <TableRow
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_margin="1dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/shop1"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/taxi1"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/takeAway1"
+                />
+
+        </TableRow>
+        <TableRow
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_margin="1dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/shop2"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/taxi2"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/takeAway2"
+                />
+
+        </TableRow>
+        <TableRow
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_margin="1dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/shop3"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/taxi3"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/takeAway3"
+                />
+
+        </TableRow>
+        <TableRow
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_margin="1dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/shop4"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/taxi4"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/takeAway4"
+                />
+
+        </TableRow>
+        <TableRow
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_margin="1dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/shop5"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/taxi5"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="1dp"
+                android:layout_column="0"
+                android:textSize="15sp"
+                android:background="#FFFFFF"
+                android:id="@+id/takeAway5"
+                />
+
+        </TableRow>
+
+    </TableLayout>
 
     <GridLayout
         android:layout_width="match_parent"
@@ -151,6 +365,7 @@
             android:background="#fff">
 
             <ImageView
+                android:id="@+id/home"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/home"
@@ -161,6 +376,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:id="@+id/profile"
                 android:src="@drawable/user"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
@@ -178,6 +394,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:id="@+id/calendar"
                 android:src="@drawable/calendar"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
