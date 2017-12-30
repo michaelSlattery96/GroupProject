@@ -23,6 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
     String test1, test2, userName;
+    TwitterLoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
             profileIntent.putExtra("PATIENT_ID", "Patient1");
             myContext.startActivity(profileIntent);
         }*/
+
+        Twitter.initialize(this);
+
         Button button = (Button)findViewById(R.id.loginButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -122,8 +133,28 @@ public class LoginActivity extends AppCompatActivity {
                 myContext.startActivity(createPatientIntent);
             }
         });
+
+        loginButton = (TwitterLoginButton) findViewById(R.id.twitter_button);
+        loginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result to the login button.
+        loginButton.onActivityResult(requestCode, resultCode, data);
+    }
 
     /*private void savePrefs(String key, String value){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);

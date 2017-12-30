@@ -24,6 +24,9 @@
         Geofence transition error: invalid transition type %1$d
     </string>
 
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">Consume</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">Consume_Secret</string>
+
     <!-- Transition type strings -->
     <string name="geofence_transition_entered">Entered</string>
     <string name="geofence_transition_exited">Exited</string>
