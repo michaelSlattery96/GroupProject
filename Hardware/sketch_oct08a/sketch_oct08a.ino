@@ -26,12 +26,16 @@ const char lightsOnCommand[] = "lights on";
 const char lightsOffCommand[] = "lights off";
 const char heatingOnCommand[] = "heating on";
 const char heatingOffCommand[] = "heating off";
-char gameEasy[MAX] = "game on";
+char gameOn[MAX] = "game on";
+char gameEasy[MAX] = "one";
+char gameHard[100] = "two";
 int lightOnApp = -1;
 int r;
 boolean alreadyEntered = false;
-boolean gameOn = false;
-char animals[4][20] = {"cow", "horse", "sheep", "chicken"};
+boolean gameOnBool = false;
+boolean easyMode = false;
+boolean hardMode = false;
+char animals[4][20] = {"cow", "horse", "pig", "chicken"};
 int alreadyDone[3];
 int current = -1;
 int gameStart = -1;
@@ -78,6 +82,36 @@ void easy(){
          }
 }
 
+void hard(){
+     char answer[MAX];
+     int j = 0;
+     if(!alreadyEntered){
+         r = random(4);
+         strcpy(gameHard, animals[r]);
+         TextToSpeech.say(gameHard);
+         delay(2000);
+         alreadyEntered = true;
+     }
+
+      if(!strcmp(gameHard,VoiceRecognition.getLastCommand())) {
+         r = random(4);
+  
+        if(!strcmp(gameHard,VoiceRecognition.getLastCommand())) { 
+           char level[30] = "Good job you passed level ";
+           char buffer[4];
+           itoa(current, buffer, 10);
+           strcat(level, buffer);
+           TextToSpeech.say(level);
+           delay(2000);
+        }
+        
+        strcat(gameHard, " ");
+        strcat(gameHard, animals[r]);
+        TextToSpeech.say(gameHard);
+        delay(2000);
+     }
+}
+
 void setup() {
   // put your setup code here, to run once:
   OneSheeld.begin();
@@ -86,6 +120,7 @@ void setup() {
   pinMode(lightLedPin,OUTPUT);
   pinMode(heatLedPin,OUTPUT);
   pinMode(heatGndPin,OUTPUT); 
+  pinMode(gamePin,OUTPUT); 
 
   //GPS Section
   char myBuffer[15];
@@ -127,18 +162,19 @@ void loop() {
     Internet.performPut(myRequest4);
   }*/
 
-  /*if(digitalRead(gamePin) == HIGH){
-    Terminal.println("Entered");
+  if(digitalRead(gamePin) == HIGH){
+    TextToSpeech.say("Entered");
     VoiceRecognition.start();
     digitalWrite(gamePin, LOW);
-  }*/
+    delay(10000);
+  }
 
   //Voice Recognition Section
   if(VoiceRecognition.isNewCommandReceived()){
       //makes pin 9 act as a GND pin
       digitalWrite(heatGndPin,LOW);
 
-      if(!gameOn){
+      if(!gameOnBool){
     		if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {  
     		  /* Turn on the LED. */
     		  digitalWrite(lightLedPin,HIGH);
@@ -162,43 +198,82 @@ void loop() {
           Phone.call("0873845770");
         }
 
+        if(!strcmp(gameOn,VoiceRecognition.getLastCommand())){
+          TextToSpeech.say("Please choose a difficulty. One or two.");
+          delay(2000);
+        }
         if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())){
           current++;
-          gameOn = true;
+          gameOnBool = true;
+          easyMode = true;
           easy();
         }
-        
-      } else if(gameOn) {
-        if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())) {
+        if(!strcmp(gameHard,VoiceRecognition.getLastCommand())){
           current++;
-    			if(current == 4) {
-      			TextToSpeech.say("Good job. You won");
+          gameOnBool = true;
+          hardMode = true;
+          hard();
+        }
+        
+      } else if(gameOnBool) {
+        //Easy Mode
+        if(easyMode){
+          if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())) {
+            current++;
+      			if(current == 5) {
+        			TextToSpeech.say("Good job. You won");
+        			delay(2000);
+        			strcpy(gameEasy, "one");
+        			current = -1;
+        			alreadyEntered = false;
+        			int i;
+              gameOnBool = false;
+  
+        			for(i = 0; i < 3; i++){
+        			  alreadyDone[i] = -1;
+        			}     
+      			
+      			} else {
+      			  easy();
+      			}
+      		} else{
+      			TextToSpeech.say("That was incorrect. You lose.");
       			delay(2000);
-      			strcpy(gameEasy, "game on");
+      			strcpy(gameEasy, "one");
       			current = -1;
-      			alreadyEntered = false;
+            gameOnBool = false;
+            alreadyEntered = false;
+            easyMode = false;
       			int i;
-            gameOn = false;
-
       			for(i = 0; i < 3; i++){
       			  alreadyDone[i] = -1;
-      			}     
-    			
-    			} else {
-    			  easy();
-    			}
-    		} else{
-    			TextToSpeech.say("That was incorrect. You lose.");
-    			delay(2000);
-    			strcpy(gameEasy, "game on");
-    			current = -1;
-          gameOn = false;
-          alreadyEntered = false;
-    			int i;
-    			for(i = 0; i < 3; i++){
-    			  alreadyDone[i] = -1;
-    			}    
-    		}
+      			}    
+      		}
+        }
+       //Hard Mode
+       if(hardMode){
+         if(!strcmp(gameHard,VoiceRecognition.getLastCommand())) {
+            current++;
+           if(current == 6) {
+              TextToSpeech.say("Good job. You won");
+              delay(2000);
+              strcpy(gameHard, "two");
+              current = -1;
+              alreadyEntered = false;
+              gameOnBool = false;       
+            } else {
+              hard();
+            }
+          } else{
+            TextToSpeech.say("That was incorrect. You lose.");
+            delay(2000);
+            strcpy(gameHard, "two");
+            current = -1;
+            gameOnBool = false;
+            alreadyEntered = false; 
+            hardMode = false;
+          }
+        }
       }
   }
   

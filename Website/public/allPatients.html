@@ -98,13 +98,11 @@
 						var tableRef = dataRef.child("users/Patients").ref();
 						tableRef.on("child_added", function(snapshot) {
 							snapshot.forEach(function(childSnapshot){
-								console.log(snapshot.key());
 								if(snapshot.key() == id){
 									var patientRef = dataRef.child("users/Patients").ref();
 									patientRef.on("value", function(snapshot2) {
 										snapshot.forEach(function(childSnapshot2) {
 											var childData = childSnapshot2.key();
-											//console.log(childSnapshot.key());
 											if(childData == "CarerID"){
 												carerId = childSnapshot2.val();
 												CarerID.innerHTML = carerId;
@@ -146,7 +144,7 @@
 								}
 							});
 						});										
-						
+						rows[i].style.backgroundColor = "#000000";
 					};}(rows[i]);
 				}
 			}
