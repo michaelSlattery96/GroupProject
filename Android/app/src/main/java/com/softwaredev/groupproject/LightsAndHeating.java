@@ -32,7 +32,7 @@ public class LightsAndHeating extends AppCompatActivity {
     ImageView calendar;
     ImageView home;
     String patientId;
-    public final KnownShield TEXT_TO_SPEECH_SHIELD =  OneSheeldSdk.getKnownShields().getKnownShield((byte)0x23);
+    //public final KnownShield TEXT_TO_SPEECH_SHIELD =  OneSheeldSdk.getKnownShields().getKnownShield((byte)0x23);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class LightsAndHeating extends AppCompatActivity {
         profile = (ImageView)findViewById(R.id.profile);
         homeAuto = (ImageView)findViewById(R.id.homeAuto);
         calendar = (ImageView)findViewById(R.id.calendar);
-        game = (Button)findViewById(R.id.gameListen);
+        //game = (Button)findViewById(R.id.gameListen);
 
         Intent getPatient = getIntent();
         patientId = getPatient.getStringExtra("PATIENT_ID");
@@ -77,7 +77,7 @@ public class LightsAndHeating extends AppCompatActivity {
             }
         });
 
-        game.setOnClickListener(new View.OnClickListener() {
+        /*game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for(int i = 0; i < TEXT_TO_SPEECH_SHIELD.getKnownFunctions().size(); i++){
@@ -86,7 +86,7 @@ public class LightsAndHeating extends AppCompatActivity {
                 //TEXT_TO_SPEECH_SHIELD.getKnownFunctions().get(0);
                 realDevice.digitalWrite(7, true);
             }
-        });
+        });*/
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override

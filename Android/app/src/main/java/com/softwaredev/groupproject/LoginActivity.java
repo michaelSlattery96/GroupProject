@@ -71,15 +71,13 @@ public class LoginActivity extends AppCompatActivity {
                 test2 = bEdit.getText().toString();
                 DatabaseReference patientRef = myRef.child("users/Patients");
                 DatabaseReference carerRef = myRef.child("users/Carers");
+
                 patientRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         for (DataSnapshot objSnapshot : snapshot.getChildren()) {
                             String z = objSnapshot.getKey();
                             System.out.println("Key: " + z);
-                            //Data user = (Data) objSnapshot.child(z).getValue();
-                            //String a = objSnapshot.getValue().toString();
-                            //System.out.println("A: " + a);
                             TextView x = (TextView) findViewById(R.id.textView2);
                             x.setText(z);
                             if (test1.equals(z)) {
@@ -98,6 +96,34 @@ public class LoginActivity extends AppCompatActivity {
 
                     public void onCancelled(DatabaseError error) {
                         // Failed to read value
+                    }
+                });
+
+                carerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                            String z = objSnapshot.getKey();
+                            System.out.println("Key: " + z);
+                            TextView x = (TextView) findViewById(R.id.textView2);
+                            x.setText(z);
+                            if (test1.equals(z)) {
+                                System.out.println("Entered");
+                                correctUser = true;
+                                userName = "users/Carers/" + test1;
+                                //savePrefs("userData", userName);
+                                System.out.println("UserName: " + userName);
+                                Intent profileIntent = new Intent(myContext, CarerHomeScreen.class);
+                                profileIntent.putExtra("CARER_ID", test1);
+                                myContext.startActivity(profileIntent);
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 

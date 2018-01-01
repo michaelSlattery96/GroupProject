@@ -36,6 +36,9 @@
         Click notification to return to app
     </string>
 
+    <string name="patientInfo">Name: %1$s \nPhone Number: %2$s \nAddress: %3$s
+        \nDate of Birth: %4$s \nEircode: %5$s \n Left Geo-fence: %6$s</string>
+
     <string name="insufficient_permissions">Insufficient permissions.</string>
     <string name="permission_rationale">Location permission is needed for core functionality</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
