@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference myRef = database.getReference();
     String test1, test2, userName;
     TwitterLoginButton loginButton;
+    EditText aEdit;
+    EditText bEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                EditText aEdit = (EditText) findViewById(R.id.nameEntry);
+                aEdit = (EditText) findViewById(R.id.nameEntry);
                 test1 = aEdit.getText().toString();
-                EditText bEdit = (EditText) findViewById(R.id.passwordEntry);
+                bEdit = (EditText) findViewById(R.id.passwordEntry);
                 test2 = bEdit.getText().toString();
                 DatabaseReference patientRef = myRef.child("users/Patients");
                 DatabaseReference carerRef = myRef.child("users/Carers");
@@ -78,17 +80,32 @@ public class LoginActivity extends AppCompatActivity {
                         for (DataSnapshot objSnapshot : snapshot.getChildren()) {
                             String z = objSnapshot.getKey();
                             System.out.println("Key: " + z);
-                            TextView x = (TextView) findViewById(R.id.textView2);
-                            x.setText(z);
                             if (test1.equals(z)) {
-                                System.out.println("Entered");
                                 correctUser = true;
                                 userName = "users/Patients/" + test1;
                                 //savePrefs("userData", userName);
-                                System.out.println("UserName: " + userName);
-                                Intent profileIntent = new Intent(myContext, patientHomeScreenActivity.class);
-                                profileIntent.putExtra("PATIENT_ID", test1);
-                                myContext.startActivity(profileIntent);
+                                DatabaseReference tempCarerRef = myRef.child("users/Carers/" + objSnapshot.child("CarerID").getValue(String.class));
+                                tempCarerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(test2.equals(dataSnapshot.child("Password").getValue(String.class))) {
+                                            Intent profileIntent = new Intent(myContext, patientHomeScreenActivity.class);
+                                            profileIntent.putExtra("PATIENT_ID", test1);
+                                            myContext.startActivity(profileIntent);
+                                        } else {
+                                            aEdit.setText("");
+                                            bEdit.setText("");
+                                            aEdit.setHintTextColor(getResources().getColor(R.color.red));
+                                            aEdit.setHint("Please try again");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                                 break;
                             }
                         }
@@ -104,18 +121,20 @@ public class LoginActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                             String z = objSnapshot.getKey();
-                            System.out.println("Key: " + z);
-                            TextView x = (TextView) findViewById(R.id.textView2);
-                            x.setText(z);
                             if (test1.equals(z)) {
-                                System.out.println("Entered");
                                 correctUser = true;
                                 userName = "users/Carers/" + test1;
                                 //savePrefs("userData", userName);
-                                System.out.println("UserName: " + userName);
-                                Intent profileIntent = new Intent(myContext, CarerHomeScreen.class);
-                                profileIntent.putExtra("CARER_ID", test1);
-                                myContext.startActivity(profileIntent);
+                                if(test2.equals(objSnapshot.child("Password").getValue(String.class))) {
+                                    Intent profileIntent = new Intent(myContext, CarerHomeScreen.class);
+                                    profileIntent.putExtra("CARER_ID", test1);
+                                    myContext.startActivity(profileIntent);
+                                } else {
+                                    aEdit.setText("");
+                                    bEdit.setText("");
+                                    aEdit.setHintTextColor(getResources().getColor(R.color.red));
+                                    aEdit.setHint("Please try again");
+                                }
                                 break;
                             }
                         }
