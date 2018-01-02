@@ -90,8 +90,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:layout_below="@+id/PatientAddressCity"
             android:layout_marginBottom="14dp"
-            android:layout_above="@+id/AddPatientButton"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -186,10 +186,21 @@
             android:layout_marginLeft="21dp"
             android:layout_marginStart="21dp"
             android:text="CarerID"
-            android:layout_alignBaseline="@+id/PatientEircode"
-            android:layout_alignBottom="@+id/PatientEircode"
+            android:layout_alignBaseline="@+id/enterCarerID"
+            android:layout_alignBottom="@+id/enterCarerID"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"/>
+
+        <EditText
+            android:id="@+id/enterCarerID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="14dp"
+            android:layout_below="@+id/PatientEircode"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 </ScrollView>

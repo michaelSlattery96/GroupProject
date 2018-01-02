@@ -179,6 +179,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button createCarer = (Button) findViewById(R.id.carerButton);
+        createCarer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createCarerIntent = new Intent(myContext, CreateCarerAccount.class);
+                myContext.startActivity(createCarerIntent);
+            }
+        });
+
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_button);
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
