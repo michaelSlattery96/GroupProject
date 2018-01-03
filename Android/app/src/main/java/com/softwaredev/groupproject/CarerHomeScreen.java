@@ -30,18 +30,15 @@ public class CarerHomeScreen extends AppCompatActivity {
     private ArrayList<String> patients;
     private Button button;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private ImageView security;
-    private ImageView calendar;
-    private ImageView home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_home_screen);
 
-        home = (ImageView)findViewById(R.id.home);
-        security = (ImageView)findViewById(R.id.homeAuto);
-        calendar = (ImageView)findViewById(R.id.calendar);
+        ImageView home = (ImageView)findViewById(R.id.home);
+        ImageView security = (ImageView)findViewById(R.id.homeAuto);
+        ImageView calendar = (ImageView)findViewById(R.id.calendar);
 
         Intent fromCreate = getIntent();
         carerId = fromCreate.getStringExtra("CARER_ID");
@@ -125,7 +122,7 @@ public class CarerHomeScreen extends AppCompatActivity {
         security.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
+                Intent intent = new Intent(getApplicationContext(), security.class);
                 intent.putExtra("CARER_ID", carerId);
                 startActivity(intent);
             }

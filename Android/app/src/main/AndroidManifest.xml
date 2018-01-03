@@ -36,7 +36,8 @@
 
         <activity android:name=".CarerHomeScreen" />
         <activity android:name=".CreateCarerAccount" />
-        <activity android:name=".carerManageCalendars"></activity>
+        <activity android:name=".carerManageCalendars" />
+        <activity android:name=".security"></activity>
     </application>
 
 </manifest>

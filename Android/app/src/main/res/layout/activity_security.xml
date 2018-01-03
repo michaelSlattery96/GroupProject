@@ -1,36 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.softwaredev.groupproject.carerManageCalendars">
+    tools:context="com.softwaredev.groupproject.security">
 
     <TextView
+        android:id="@+id/ChooseHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Patients"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimaryDark"
-        android:layout_below="@+id/dateAndTime"
-        android:id="@+id/allPatients"
+        android:text="Transfer Patient"
         android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/white"/>
 
-    <ScrollView
-        android:id="@+id/patientScroll"
-        android:layout_below="@+id/allPatients"
+    <TextView
+        android:id="@+id/patientID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PatientID: "
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_alignBaseline="@+id/enterPatientID"
+        android:layout_alignBottom="@+id/enterPatientID"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:id="@+id/enterPatientID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="14dp"
+        android:layout_below="@+id/ChooseHeading"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:layout_below="@+id/enterPatientID"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"/>
+
+    <TextView
+        android:id="@+id/patientFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Patient Found!"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_below="@+id/search"/>
+
+    <Button
+        android:id="@+id/takePatient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transfer"
+        android:enabled="false"
+        android:layout_below="@+id/patientFound"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"/>
+
+    <TextView
+        android:id="@+id/AddPatient"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-        <TableLayout
-            android:id="@+id/patientTable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="0,1,2"
-            android:gravity="left"
-            android:paddingBottom="20dp">
-        </TableLayout>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:text="Add New Patient"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/white"
+        android:layout_below="@+id/takePatient"/>
+
+    <Button
+        android:id="@+id/addNewPatient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Patient"
+        android:layout_below="@+id/AddPatient"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"/>
 
     <GridLayout
         android:layout_width="match_parent"

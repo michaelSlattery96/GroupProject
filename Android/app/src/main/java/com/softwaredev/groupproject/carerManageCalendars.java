@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,6 +30,10 @@ public class carerManageCalendars extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carer_manage_calendars);
+
+        ImageView home = (ImageView)findViewById(R.id.home);
+        ImageView security = (ImageView)findViewById(R.id.homeAuto);
+        ImageView calendar = (ImageView)findViewById(R.id.calendar);
 
         Intent fromCreate = getIntent();
         carerId = fromCreate.getStringExtra("CARER_ID");
@@ -85,6 +90,31 @@ public class carerManageCalendars extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CarerHomeScreen.class);
+                intent.putExtra("CARER_ID", carerId);
+                startActivity(intent);
+            }
+        });
+
+        security.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), security.class);
+                intent.putExtra("CARER_ID", carerId);
+                startActivity(intent);
+            }
+        });
+
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
