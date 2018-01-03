@@ -1,16 +1,13 @@
 package com.softwaredev.groupproject;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,30 +15,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
-public class CarerHomeScreen extends AppCompatActivity {
+public class carerManageCalendars extends AppCompatActivity {
 
-    private TextView dateAndTime;
     private String carerId;
     private ArrayList<String> patients;
-    private Button button;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private ImageView security;
-    private ImageView calendar;
-    private ImageView home;
+    private Button button;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carer_home_screen);
-
-        home = (ImageView)findViewById(R.id.home);
-        security = (ImageView)findViewById(R.id.homeAuto);
-        calendar = (ImageView)findViewById(R.id.calendar);
+        setContentView(R.layout.activity_carer_manage_calendars);
 
         Intent fromCreate = getIntent();
         carerId = fromCreate.getStringExtra("CARER_ID");
@@ -67,18 +54,17 @@ public class CarerHomeScreen extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 TableRow row = (TableRow) view.getParent();
-                                int index = tableLayout.indexOfChild(row);
+                                index = tableLayout.indexOfChild(row);
                                 DatabaseReference patientRef = database.getReference("users/Patients/" + patients.get(index));
 
                                 patientRef.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        TextView patientInfo = (TextView) findViewById(R.id.patientDesc);
-
-                                        patientInfo.setText(getString(R.string.patientInfo, dataSnapshot.child("Name").getValue(String.class),
-                                                dataSnapshot.child("Phone Number").getValue(String.class), dataSnapshot.child("Address").getValue(String.class),
-                                                dataSnapshot.child("Date of Birth").getValue(String.class), dataSnapshot.child("Eircode").getValue(String.class),
-                                                dataSnapshot.child("Left Geo").getValue(String.class)));
+                                        Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                                        intent.putExtra("CARER_ID", carerId);
+                                        intent.putExtra("PATIENT_ID", patients.get(index));
+                                        intent.putExtra("MANAGING", true);
+                                        startActivity(intent);
                                     }
 
                                     @Override
@@ -102,43 +88,5 @@ public class CarerHomeScreen extends AppCompatActivity {
 
             }
         });
-
-        dateAndTime = (TextView) findViewById(R.id.dateAndTime);
-
-        final Handler someHandler = new Handler(getMainLooper());
-        someHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dateAndTime.setText(new SimpleDateFormat("dd/MMM/yyyy kk:mm",
-                        Locale.UK).format(new Date()));
-                someHandler.postDelayed(this, 1000);
-            }
-        }, 10);
-
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        security.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
-                intent.putExtra("CARER_ID", carerId);
-                startActivity(intent);
-            }
-        });
-
-        calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), carerManageCalendars.class);
-                intent.putExtra("CARER_ID", carerId);
-                startActivity(intent);
-            }
-        });
-
     }
 }

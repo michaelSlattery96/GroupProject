@@ -34,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/displayText"
+        android:background="@color/white"
         android:layout_below="@+id/calendarView"/>
 
     <GridLayout
@@ -129,5 +130,16 @@
 
         </LinearLayout>
     </GridLayout>
+
+    <Button
+        android:id="@+id/manageCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:text="Finish Managing"
+        android:visibility="gone"
+        android:layout_marginBottom="-7dp"
+        android:layout_marginLeft="-7dp"
+        android:layout_marginRight="-7dp" />
 
 </RelativeLayout>

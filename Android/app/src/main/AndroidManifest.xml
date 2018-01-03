@@ -35,7 +35,8 @@
         <service android:name=".GeofenceTransitionsIntentService" />
 
         <activity android:name=".CarerHomeScreen" />
-        <activity android:name=".CreateCarerAccount"></activity>
+        <activity android:name=".CreateCarerAccount" />
+        <activity android:name=".carerManageCalendars"></activity>
     </application>
 
 </manifest>

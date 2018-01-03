@@ -35,6 +35,8 @@ public class TextActivity extends AppCompatActivity {
     private ImageView calendar;
     private ImageView home;
     private String patientId;
+    private String carerId;
+    private boolean managing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,55 +60,85 @@ public class TextActivity extends AppCompatActivity {
         confirmChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
-                intent.putExtra(SAVED_MESSAGE, savedText.getText().toString());
-                intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
-                intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
-                intent.putExtra("OVERWRITE", OVERWRITE);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
+                if(!managing) {
+                    Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
+                    intent.putExtra(SAVED_MESSAGE, savedText.getText().toString());
+                    intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("OVERWRITE", OVERWRITE);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
+                    intent.putExtra(SAVED_MESSAGE, savedText.getText().toString());
+                    intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("OVERWRITE", OVERWRITE);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    intent.putExtra("CARER_ID", carerId);
+                    intent.putExtra("MANAGING", managing);
+                    startActivity(intent);
+                }
             }
         });
 
         patientId = dateIntent.getStringExtra("PATIENT_ID");
 
+        carerId = dateIntent.getStringExtra("CARER_ID");
+
+        managing = dateIntent.getBooleanExtra("MANAGING", false);
+
         gestureDetector = new GestureDetectorCompat(this, gestureActivity);
 
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), patientHomeScreenActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+        if(!managing) {
+            home.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), patientHomeScreenActivity.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }
+            });
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+            profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }
+            });
 
-        homeAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+            homeAuto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }
+            });
 
-        calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+            calendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            Button manageCalendar = (Button) findViewById(R.id.manageCalendar);
+            manageCalendar.setVisibility(View.VISIBLE);
+
+            manageCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), carerManageCalendars.class);
+                    intent.putExtra("CARER_ID", carerId);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -144,13 +176,23 @@ public class TextActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY){
             if(event2.getX() > event1.getX()){
-                Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
-                intent.putExtra(SAVED_MESSAGE, "No entry added");
-                intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
-                intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
-                System.out.println("TextActivity date: " + SAVED_DATE_LONG);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
+                if(!managing) {
+                    Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
+                    intent.putExtra(SAVED_MESSAGE, "No entry added");
+                    intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                } else{
+                    Intent intent = new Intent(TextActivity.this, CalendarActivity.class);
+                    intent.putExtra(SAVED_MESSAGE, "No entry added");
+                    intent.putExtra(SAVED_DATE_STRING, savedDate.getText().toString());
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    intent.putExtra("CARER_ID", carerId);
+                    intent.putExtra("MANAGING", managing);
+                    startActivity(intent);
+                }
             }
             return true;
         }

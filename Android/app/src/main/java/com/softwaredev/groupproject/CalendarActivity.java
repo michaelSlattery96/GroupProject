@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -47,14 +48,20 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     private GestureActivity gestureActivity = new GestureActivity();
     private ArrayList<String> savedDates = new ArrayList<>();
     private ArrayList<String> savedMessages = new ArrayList<>();
+    private ArrayList<Long> orderDates = new ArrayList<>();
+    private ArrayList<String> orderString = new ArrayList<>();
+    private ArrayList<Long> contextOrderDate = new ArrayList<>();
+    private ArrayList<String> contextOrderString = new ArrayList<>();
     private ImageView homeAuto;
     private ImageView profile;
     private ImageView calendar;
     private ImageView home;
     private String patientId;
+    private String carerId;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference writeDateRef;
     private DatabaseReference writeMessageRef;
+    private boolean managing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,10 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
 
         Intent getPatient = getIntent();
         patientId = getPatient.getStringExtra("PATIENT_ID");
+
+        carerId = getPatient.getStringExtra("CARER_ID");
+
+        managing = getPatient.getBooleanExtra("MANAGING", false);
 
         writeDateRef = database.getReference("users/Patients/" + patientId
                 + "/Dates");
@@ -102,7 +113,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         registerForContextMenu(dateDisplay);
 
         //Reads First to check if previous entries exist
-        writeDateRef.addValueEventListener(new ValueEventListener() {
+        writeDateRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("Entered1");
@@ -118,7 +129,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        writeMessageRef.addValueEventListener(new ValueEventListener() {
+        writeMessageRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -131,7 +142,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                         TextActivity.SAVED_DATE_LONG);
                 System.out.println("Long: " + SAVED_DATE_LONG);
                 if(SAVED_DATE_LONG != 0) {
-                    //System.out.println(SAVED_DATE_LONG);
+                    System.out.println(SAVED_DATE_LONG);
                     calendarView.setDate(SAVED_DATE_LONG);
                     dateDisplay.setText(messageIntent.getStringExtra(TextActivity.SAVED_DATE_STRING));
                 }
@@ -206,6 +217,66 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                         }
                     }
                 }
+
+                //Start the background service
+                Intent svc=new Intent(getApplicationContext(), backgroundService.class);
+                svc.putExtra("SAVED_DATES", savedDates);
+                startService(svc);
+
+                //Get the current year and month
+                long timestamp = calendarView.getDate();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(timestamp);
+                year = cal.get(Calendar.YEAR);
+                month = cal.get(Calendar.MONTH) + 1;
+
+                //What happens when a new date is chosen on the CalendarView
+                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                    @Override
+                    public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
+                        //Change dateDisplay
+                        dateDisplay.setText("Date: " + i2 + " / " + (i1+1) + " / " + i);
+
+                        //Change year and month
+                        year = i;
+                        month = i1+1;
+
+                        savedMessage.setTextColor(ContextCompat.getColor(getApplicationContext(),
+                                R.color.black));
+
+                        System.out.println("Cal Date: " + calendarView.getDate());
+
+                        Calendar c = Calendar.getInstance();
+                        c.set(i, i1, i2);
+
+                        calendarView.setDate(c.getTimeInMillis());
+
+                        SAVED_DATE_LONG = calendarView.getDate();
+
+                        for (int date = 0; date < savedDates.size(); date++) {
+                            System.out.println("Date: " + savedDates.get(date));
+                        }
+
+                        //If the date has anything written on it set the text
+                        for (int date = 0; date < savedDates.size(); date++) {
+                            if (dateDisplay.getText().toString().equals(savedDates.get(date))) {
+                                savedMessage.setText(savedMessages.get(date));
+                                break;
+                            } else {
+                                savedMessage.setText("");
+                            }
+                        }
+                    }
+                });
+
+                sortDates();
+
+                for(int i = 0; i < orderString.size();  i++){
+                    String[] split = orderString.get(i).split(": ");
+                    savedDates.set(i, split[0] + ": " +  split[1]);
+                    savedMessages.set(i, split[2]);
+                }
+
                 //Saves arrays to firebase
                 writeDateRef.setValue(savedDates);
                 writeMessageRef.setValue(savedMessages);
@@ -218,90 +289,54 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        //Start the background service
-        Intent svc=new Intent(getApplicationContext(), backgroundService.class);
-        svc.putExtra("SAVED_DATES", savedDates);
-        startService(svc);
 
-        //Get the current year and month
-        long timestamp = calendarView.getDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(timestamp);
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH) + 1;
-
-        //What happens when a new date is choden on the CalendarView
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                //Change dateDisplay
-                dateDisplay.setText("Date: " + i2 + " / " + (i1+1) + " / " + i);
-
-                //Change year and month
-                year = i;
-                month = i1+1;
-
-                savedMessage.setTextColor(ContextCompat.getColor(getApplicationContext(),
-                        R.color.black));
-
-                System.out.println("Cal Date: " + calendarView.getDate());
-
-                Calendar c = Calendar.getInstance();
-                c.set(i, i1, i2);
-
-                calendarView.setDate(c.getTimeInMillis());
-
-                SAVED_DATE_LONG = calendarView.getDate();
-
-                for (int date = 0; date < savedDates.size(); date++) {
-                    System.out.println("Date: " + savedDates.get(date));
+        if(!managing) {
+            home.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), patientHomeScreenActivity.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
                 }
+            });
 
-                //If the date has anything written on it set the text
-                for (int date = 0; date < savedDates.size(); date++) {
-                    if (dateDisplay.getText().toString().equals(savedDates.get(date))) {
-                        savedMessage.setText(savedMessages.get(date));
-                        break;
-                    } else {
-                        savedMessage.setText("");
-                    }
+            profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
                 }
-            }
-        });
+            });
 
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), patientHomeScreenActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+            homeAuto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }
+            });
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+            calendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        homeAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
+                }
+            });
+        } else {
+            Button manageCalendar = (Button) findViewById(R.id.manageCalendar);
+            manageCalendar.setVisibility(View.VISIBLE);
 
-        calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+            manageCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), carerManageCalendars.class);
+                    intent.putExtra("CARER_ID", carerId);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -311,8 +346,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         //Code for the ContextMenu
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Events this month");
-        ArrayList<Integer> orderDates = new ArrayList<>();
-        ArrayList<String> orderString = new ArrayList<>();
 
         for(int i = 0; i < savedDates.size(); i++){
             //Split the dates string into an array
@@ -323,17 +356,69 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             //Split first item to get rid of Date:
             String splitDay[] = DMY[0].split(": ");
 
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splitDay[1]));
+
             //If the month and year are the same as the current add the message and day to the arrays
             if(Integer.parseInt(tempMonth) == month && Integer.parseInt(tempYear) == year){
-                orderDates.add(Integer.parseInt(splitDay[1]));
-                orderString.add(savedDates.get(i) + ": " + savedMessages.get(i));
+                contextOrderDate.add(cal.getTimeInMillis());
+                contextOrderString.add(savedDates.get(i) + ": " + savedMessages.get(i));
             }
+        }
+
+        //Use insertion sort to sort the arrays
+        for(int i = 1; i < contextOrderDate.size(); i++){
+            String currentString = contextOrderString.get(i);
+            long currentDate = contextOrderDate.get(i);
+            int j = i-1;
+
+            while(j >= 0 && contextOrderDate.get(j) > currentDate){
+                contextOrderDate.set(j+1, contextOrderDate.get(j));
+                contextOrderString.set(j+1, contextOrderString.get(j));
+                j = j-1;
+            }
+            contextOrderDate.set(j+1, currentDate);
+            contextOrderString.set(j+1, currentString);
+        }
+
+        //Add the dates in order to the context mane
+        for(int i = 0; i < contextOrderString.size(); i++){
+            menu.add(0, v.getId(), 0, contextOrderString.get(i));
+        }
+
+        contextOrderDate.clear();
+        contextOrderString.clear();
+    }
+
+    private void sortDates(){
+
+        for(int i = 0; i < savedDates.size(); i++){
+            //Split the dates string into an array
+            String DMY[] = savedDates.get(i).split(" / ");
+            String tempMonth = DMY[1];
+            String tempYear = DMY[2];
+
+            //Split first item to get rid of Date:
+            String splitDay[] = DMY[0].split(": ");
+            String splitMonth = DMY[1];
+            String splitYear = DMY[2];
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, Integer.parseInt(splitYear));
+            cal.set(Calendar.MONTH, Integer.parseInt(splitMonth)-1);
+            cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splitDay[1]));
+
+            //If the month and year are the same as the current add the message and day to the arrays
+            //if(Integer.parseInt(tempMonth) == month && Integer.parseInt(tempYear) == year){
+                orderDates.add(cal.getTimeInMillis());
+                orderString.add(savedDates.get(i) + ": " + savedMessages.get(i));
+            //}
         }
 
         //Use insertion sort to sort the arrays
         for(int i = 1; i < orderDates.size(); i++){
             String currentString = orderString.get(i);
-            int currentDate = orderDates.get(i);
+            long currentDate = orderDates.get(i);
             int j = i-1;
 
             while(j >= 0 && orderDates.get(j) > currentDate){
@@ -344,12 +429,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             orderDates.set(j+1, currentDate);
             orderString.set(j+1, currentString);
         }
-
-        //Add the dates in order to the context mane
-        for(int i = 0; i < orderString.size(); i++){
-            menu.add(0, v.getId(), 0, orderString.get(i));
-        }
-
     }
 
     @Override
@@ -367,12 +446,23 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY){
             if(event2.getX() < event1.getX()) {
-                Intent intent = new Intent(CalendarActivity.this, TextActivity.class);
-                intent.putExtra(SAVED_DATE, dateDisplay.getText());
-                System.out.println("Going Date: " + SAVED_DATE_LONG);
-                intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
+                if(!managing) {
+                    Intent intent = new Intent(CalendarActivity.this, TextActivity.class);
+                    intent.putExtra(SAVED_DATE, dateDisplay.getText());
+                    System.out.println("Going Date: " + SAVED_DATE_LONG);
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(CalendarActivity.this, TextActivity.class);
+                    intent.putExtra(SAVED_DATE, dateDisplay.getText());
+                    System.out.println("Going Date: " + SAVED_DATE_LONG);
+                    intent.putExtra("SAVED_DATE_LONG", SAVED_DATE_LONG);
+                    intent.putExtra("PATIENT_ID", patientId);
+                    intent.putExtra("CARER_ID", carerId);
+                    intent.putExtra("MANAGING", managing);
+                    startActivity(intent);
+                }
             }
             return true;
         }

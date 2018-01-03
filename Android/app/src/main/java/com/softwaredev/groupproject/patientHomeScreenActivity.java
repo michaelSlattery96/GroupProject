@@ -37,8 +37,10 @@ import com.integreight.onesheeld.sdk.OneSheeldSdk;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -173,16 +175,38 @@ public class patientHomeScreenActivity extends AppCompatActivity{
                     TextView calendarMessage2 = (TextView)findViewById(R.id.calendarMessage2);
                     TextView calendarMessage3 = (TextView)findViewById(R.id.calendarMessage3);
 
-                    for(int i = 0; i < 3; i++){
-                        if(i == 0 && i < savedDates.size()) {
-                            calendarDate1.setText(savedDates.get(i));
-                            calendarMessage1.setText(savedMessages.get(i));
-                        } else if(i == 1 && i < savedDates.size()){
-                            calendarDate2.setText(savedDates.get(i));
-                            calendarMessage2.setText(savedMessages.get(i));
-                        } else if(i == 2 && i < savedDates.size()){
-                            calendarDate3.setText(savedDates.get(i));
-                            calendarMessage3.setText(savedMessages.get(i));
+                    int check = 0;
+
+                    for(int i = 0; i < savedMessages.size(); i++){
+
+                        String DMY[] = savedDates.get(i).split(" / ");
+                        String splitDay[] = DMY[0].split(": ");
+                        String splitMonth = DMY[1];
+                        String splitYear = DMY[2];
+
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.YEAR, Integer.parseInt(splitYear));
+                        cal.set(Calendar.MONTH, Integer.parseInt(splitMonth)-1);
+                        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splitDay[1]));
+
+                        final Calendar yesterday = Calendar.getInstance();
+                        yesterday.add(Calendar.DATE, -1);
+
+                        System.out.println("Current: " + cal.getTimeInMillis());
+                        System.out.println("Yesterday: " + yesterday.getTimeInMillis());
+
+                        if(cal.getTimeInMillis() > yesterday.getTimeInMillis()) {
+                            if (check == 0 && check < savedDates.size()) {
+                                calendarDate1.setText(savedDates.get(i));
+                                calendarMessage1.setText(savedMessages.get(i));
+                            } else if (check == 1 && check < savedDates.size()) {
+                                calendarDate2.setText(savedDates.get(i));
+                                calendarMessage2.setText(savedMessages.get(i));
+                            } else if (check == 2 && check < savedDates.size()) {
+                                calendarDate3.setText(savedDates.get(i));
+                                calendarMessage3.setText(savedMessages.get(i));
+                            }
+                            check++;
                         }
                     }
                 }
