@@ -165,6 +165,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                                     savedMessages.remove(i);
                                     savedMessages.add(i, tempString);
                                     savedMessage.setText(savedMessages.get(i));
+                                    deleted = true;
                                     break;
                                 }
                             }
@@ -198,7 +199,8 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                                 }
                             } else if (!deleted) {
                                 //Error message
-                                savedMessage.setText("ERROR: Nothing to change. Choose overwrite if you " +
+                                System.out.println("Warning1");
+                                savedMessage.setText("ERROR: Nothing to change. Choose New Message if you " +
                                         "want to add a new message.");
                                 savedMessage.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                             }
@@ -209,7 +211,8 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                             savedDates.add(dateDisplay.getText().toString());
                             savedMessage.setText(message);
                         } else {
-                            savedMessage.setText("ERROR: Nothing to change. Choose overwrite if you " +
+                            System.out.println("Warning2");
+                            savedMessage.setText("ERROR: Nothing to change. Choose New Message if you " +
                                     "want to add a new message.");
                             savedMessage.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                         }
