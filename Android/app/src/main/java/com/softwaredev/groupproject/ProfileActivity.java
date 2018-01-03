@@ -3,6 +3,7 @@ package com.softwaredev.groupproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity {
 
     private String TAG = patientHomeScreenActivity.class.getSimpleName();
-    private ImageView homeAuto;
     private ImageView profile;
     private ImageView calendar;
     private ImageView home;
@@ -31,7 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         home = (ImageView)findViewById(R.id.home);
         profile = (ImageView)findViewById(R.id.profile);
-        homeAuto = (ImageView)findViewById(R.id.homeAuto);
         calendar = (ImageView)findViewById(R.id.calendar);
 
         Intent fromCreate = getIntent();
@@ -56,15 +55,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        homeAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
-
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +74,10 @@ public class ProfileActivity extends AppCompatActivity {
                 TextView dateOfBirth = (TextView) findViewById(R.id.dateOfBirth);
                 TextView phoneNo = (TextView) findViewById(R.id.PhoneNo);
                 TextView address = (TextView) findViewById(R.id.Address);
+                TextView carerID = (TextView) findViewById(R.id.CarerID);
+                TextView patientID = (TextView) findViewById(R.id.patientID);
+                TextView carerName = (TextView) findViewById(R.id.CarerName);
+                TextView eircode = (TextView) findViewById(R.id.Eircode);
 
                 name.setText(R.string.userName);
                 name.append(" " + dataSnapshot.child("Name").getValue(String.class));
@@ -93,6 +87,14 @@ public class ProfileActivity extends AppCompatActivity {
                 phoneNo.append(" " + dataSnapshot.child("Phone Number").getValue(String.class));
                 address.setText(R.string.address);
                 address.append(" " + dataSnapshot.child("Address").getValue(String.class));
+                carerID.setText("CarerID: ");
+                carerID.append(" " + dataSnapshot.child("CarerID").getValue(String.class));
+                patientID.setText("PatientID: ");
+                patientID.append(" " + dataSnapshot.child("PatientID").getValue(String.class));
+                carerName.setText("Carer Name: ");
+                carerName.append(" " + dataSnapshot.child("Carer Name").getValue(String.class));
+                eircode.setText("Eircode: ");
+                eircode.append(" " + dataSnapshot.child("Eircode").getValue(String.class));
             }
 
             @Override

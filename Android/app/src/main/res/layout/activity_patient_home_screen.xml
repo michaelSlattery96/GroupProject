@@ -8,9 +8,10 @@
 
         <TextView
             android:id="@+id/dateAndTime"
-            android:layout_width="240dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="40sp"
+            android:background="@color/white"
             android:textColor="#000000"
             />
 
@@ -19,10 +20,11 @@
             android:layout_height="wrap_content"
             android:text="Previous Calendar Entries"
             android:layout_below="@+id/dateAndTime"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimaryDark"
             android:id="@+id/PreviousHeading"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:paddingTop="20dp" />
+            android:textStyle="bold"/>
 
         <TableLayout
             android:layout_below="@+id/PreviousHeading"
@@ -116,238 +118,58 @@
 
         </TableLayout>
 
-    <TableLayout
-        android:id="@+id/numberTable"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Lights and Heating"
         android:layout_below="@+id/table"
-        android:stretchColumns="0,1,2,3"
-        android:gravity="left"
-        android:paddingBottom="20dp">
-        <TableRow
-        android:background="#FFFFFF"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/lightsAndHeating"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:layout_below="@+id/lightsAndHeating"
+        android:id="@+id/LightSwitch"
         android:layout_width="match_parent"
-        android:layout_margin="1dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Shops"
-            android:layout_margin="1dp"
-            android:layout_column="0"
-            android:textSize="15sp"
-            android:background="#FFFFFF"
-            />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.93"
+        android:text="Lights"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="200dp"
+        android:layout_marginLeft="14dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Taxis"
-            android:layout_margin="1dp"
-            android:layout_column="0"
-            android:textSize="15sp"
-            android:background="#FFFFFF"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Take-Away"
-            android:layout_margin="1dp"
-            android:layout_column="0"
-            android:textSize="15sp"
-            android:background="#FFFFFF"
-            />
+    <Switch
+        android:layout_below="@+id/LightSwitch"
+        android:id="@+id/HeatSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Heating"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="200dp"
+        android:layout_marginLeft="14dp"/>
 
-    </TableRow>
-        <TableRow
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_margin="1dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/shop1"
-                />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contact Your Carer"
+        android:layout_below="@+id/HeatSwitch"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/contact"
+        android:layout_marginTop="20dp"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/taxi1"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/takeAway1"
-                />
-
-        </TableRow>
-        <TableRow
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_margin="1dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/shop2"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/taxi2"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/takeAway2"
-                />
-
-        </TableRow>
-        <TableRow
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_margin="1dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/shop3"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/taxi3"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/takeAway3"
-                />
-
-        </TableRow>
-        <TableRow
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_margin="1dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/shop4"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/taxi4"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/takeAway4"
-                />
-
-        </TableRow>
-        <TableRow
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_margin="1dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/shop5"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/taxi5"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_margin="1dp"
-                android:layout_column="0"
-                android:textSize="15sp"
-                android:background="#FFFFFF"
-                android:id="@+id/takeAway5"
-                />
-
-        </TableRow>
-
-    </TableLayout>
+    <Button
+        android:id="@+id/callCarer"
+        android:layout_below="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Call Carer"
+        android:layout_centerHorizontal="true"/>
 
     <GridLayout
         android:layout_width="match_parent"
@@ -385,15 +207,6 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/homeAuto"
-                android:src="@drawable/security"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
                 android:id="@+id/calendar"
                 android:src="@drawable/calendar"
                 android:layout_centerVertical="true"
@@ -423,13 +236,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Profile"
-                android:gravity="center"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Settings"
                 android:gravity="center"
                 android:layout_weight="1"/>
 

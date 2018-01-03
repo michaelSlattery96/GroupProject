@@ -1,10 +1,12 @@
 package com.softwaredev.groupproject;
 
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,17 +52,17 @@ public class patientHomeScreenActivity extends AppCompatActivity{
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private TextView textView;
-    private ImageView homeAuto;
-    private ImageView profile;
-    private ImageView calendar;
-    private ImageView home;
     private String patientId;
-    private ArrayList<TextView> shops = new ArrayList<>();
-    private ArrayList<TextView> taxis = new ArrayList<>();
-    private ArrayList<TextView> foods = new ArrayList<>();
     private ArrayList<String> savedDates = new ArrayList<>();
     private ArrayList<String> savedMessages = new ArrayList<>();
     private static final String TAG = patientHomeScreenActivity.class.getSimpleName();
+    private Switch lights;
+    private Switch heating;
+    private boolean light = false;
+    private boolean heat = false;
+    private OneSheeldDevice realDevice;
+    private Button callCarer;
+
     /**
      * Tracks whether the user requested to add or remove geofences, or to do neither.
      */
@@ -89,10 +92,18 @@ public class patientHomeScreenActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Virtual Care Assistant");
         setContentView(R.layout.activity_patient_home_screen);
-        home = (ImageView)findViewById(R.id.home);
-        profile = (ImageView)findViewById(R.id.profile);
-        homeAuto = (ImageView)findViewById(R.id.homeAuto);
-        calendar = (ImageView)findViewById(R.id.calendar);
+        ImageView home = (ImageView)findViewById(R.id.home);
+        ImageView profile = (ImageView)findViewById(R.id.profile);
+        ImageView calendar = (ImageView)findViewById(R.id.calendar);
+        lights = (Switch)findViewById(R.id.LightSwitch);
+        heating = (Switch)findViewById(R.id.HeatSwitch);
+        callCarer = (Button)findViewById(R.id.callCarer);
+
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()) {
+            mBluetoothAdapter.enable();
+        }
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();
@@ -107,41 +118,7 @@ public class patientHomeScreenActivity extends AppCompatActivity{
         Intent fromCreate = getIntent();
         patientId = fromCreate.getStringExtra("PATIENT_ID");
 
-        // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        shops.add((TextView)findViewById(R.id.shop1));
-        shops.add((TextView)findViewById(R.id.shop2));
-        shops.add((TextView)findViewById(R.id.shop3));
-        shops.add((TextView)findViewById(R.id.shop4));
-        shops.add((TextView)findViewById(R.id.shop5));
-
-        taxis.add((TextView)findViewById(R.id.taxi1));
-        taxis.add((TextView)findViewById(R.id.taxi2));
-        taxis.add((TextView)findViewById(R.id.taxi3));
-        taxis.add((TextView)findViewById(R.id.taxi4));
-        taxis.add((TextView)findViewById(R.id.taxi5));
-
-        foods.add((TextView)findViewById(R.id.takeAway1));
-        foods.add((TextView)findViewById(R.id.takeAway2));
-        foods.add((TextView)findViewById(R.id.takeAway3));
-        foods.add((TextView)findViewById(R.id.takeAway4));
-        foods.add((TextView)findViewById(R.id.takeAway5));
-
-        for(int i = 1; i <= 5; i++) {
-            DatabaseReference shopNameRef = database.getReference("Phone No/Shops/Shop" + i + "/Name");
-            loadData(shopNameRef, shops.get(i-1));
-        }
-
-        for(int i = 1; i <= 5; i++) {
-            DatabaseReference taxiNameRef = database.getReference("Phone No/Taxis/Taxi" + i + "/Name");
-            loadData(taxiNameRef, taxis.get(i-1));
-        }
-
-        for(int i = 1; i <= 5; i++) {
-            DatabaseReference foodNameRef = database.getReference("Phone No/Food/Food" + i + "/Name");
-            loadData(foodNameRef, foods.get(i-1));
-        }
 
         DatabaseReference writeDateRef = database.getReference("users/Patients/" + patientId
                 + "/Dates");
@@ -226,11 +203,51 @@ public class patientHomeScreenActivity extends AppCompatActivity{
         someHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                textView.setText(new SimpleDateFormat("dd/MMM/yyyy h:mm a",
+                textView.setText(new SimpleDateFormat("dd/MMM/yyyy kk:mm",
                         Locale.UK).format(new Date()));
                 someHandler.postDelayed(this, 1000);
             }
         }, 10);
+
+
+        lights.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!light) {
+                    light = true;
+                } else {
+                    light = false;
+                }
+                if(realDevice != null) {
+                    realDevice.digitalWrite(13, light);
+                }
+            }
+        });
+
+        heating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!heat) {
+                    heat = true;
+                } else {
+                    heat = false;
+                }
+
+                if(realDevice != null) {
+                    realDevice.digitalWrite(9, false);
+                    realDevice.digitalWrite(8, heat);
+                }
+            }
+        });
+
+        callCarer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:123456789"));
+                startActivity(callIntent);
+            }
+        });
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,15 +260,6 @@ public class patientHomeScreenActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("PATIENT_ID", patientId);
-                startActivity(intent);
-            }
-        });
-
-        homeAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
                 intent.putExtra("PATIENT_ID", patientId);
                 startActivity(intent);
             }
@@ -279,6 +287,34 @@ public class patientHomeScreenActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    private void connectOneSheeld(){
+        OneSheeldSdk.init(this);
+        OneSheeldSdk.setDebugging(true);
+
+        OneSheeldManager manager = OneSheeldSdk.getManager();
+        manager.setConnectionRetryCount(1);
+        manager.setAutomaticConnectingRetriesForClassicConnections(true);
+
+        OneSheeldScanningCallback scanningCallback = new OneSheeldScanningCallback() {
+            @Override
+            public void onDeviceFind(OneSheeldDevice device) {
+                OneSheeldSdk.getManager().cancelScanning();
+                device.connect();
+            }
+        };
+
+        OneSheeldConnectionCallback connectionCallback = new OneSheeldConnectionCallback() {
+            @Override
+            public void onConnect(OneSheeldDevice device) {
+                realDevice = device;
+            }
+        };
+        manager.addScanningCallback(scanningCallback);
+        manager.addConnectionCallback(connectionCallback);
+
+        manager.scan();
     }
 
    // public void onStart() {

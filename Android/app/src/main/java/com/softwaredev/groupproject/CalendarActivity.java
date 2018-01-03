@@ -52,7 +52,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     private ArrayList<String> orderString = new ArrayList<>();
     private ArrayList<Long> contextOrderDate = new ArrayList<>();
     private ArrayList<String> contextOrderString = new ArrayList<>();
-    private ImageView homeAuto;
     private ImageView profile;
     private ImageView calendar;
     private ImageView home;
@@ -89,7 +88,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         savedMessage.setTextColor(ContextCompat.getColor(this, R.color.black));
         home = (ImageView)findViewById(R.id.home);
         profile = (ImageView)findViewById(R.id.profile);
-        homeAuto = (ImageView)findViewById(R.id.homeAuto);
         calendar = (ImageView)findViewById(R.id.calendar);
 
         //Spinner being created.
@@ -304,15 +302,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    intent.putExtra("PATIENT_ID", patientId);
-                    startActivity(intent);
-                }
-            });
-
-            homeAuto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), LightsAndHeating.class);
                     intent.putExtra("PATIENT_ID", patientId);
                     startActivity(intent);
                 }

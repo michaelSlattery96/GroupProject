@@ -21,7 +21,6 @@
         <activity android:name=".patientHomeScreenActivity" />
         <activity android:name=".CreateAccount" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".LightsAndHeating" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".TextActivity" />
         <activity android:name=".LoginActivity">

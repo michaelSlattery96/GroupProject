@@ -91,15 +91,6 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/homeAuto"
-                android:src="@drawable/security"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
                 android:id="@+id/calendar"
                 android:src="@drawable/calendar"
                 android:layout_centerVertical="true"
@@ -129,13 +120,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Profile"
-                android:gravity="center"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Settings"
                 android:gravity="center"
                 android:layout_weight="1"/>
 
