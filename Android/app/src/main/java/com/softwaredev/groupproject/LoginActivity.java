@@ -187,19 +187,6 @@ public class LoginActivity extends AppCompatActivity {
                 myContext.startActivity(createCarerIntent);
             }
         });
-
-        loginButton = (TwitterLoginButton) findViewById(R.id.twitter_button);
-        loginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                // Do something on failure
-            }
-        });
     }
 
     @Override

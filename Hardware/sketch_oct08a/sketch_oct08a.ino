@@ -9,8 +9,8 @@
  
 #include <OneSheeld.h>
 //Code to put longitude and latitude to firebase
-HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/latitude.json");
-HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.json");
+HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/GPS/latitude.json");
+HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/GPS/longitude.json");
 //HttpRequest myRequest3("https://rd-year-group-project.firebaseio.com/1Sheeld.json");
 //HttpRequest myRequest4("https://rd-year-group-project.firebaseio.com/1Sheeld/Game.json");
 //HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2/Lights.json");
@@ -65,10 +65,10 @@ void easy(){
                 }
 
                 if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())) { 
-							      char level[30] = "Good job you passed level ";
-							      char buffer[4];
-							      itoa(current, buffer, 10);
-							      strcat(level, buffer);
+                    char level[30] = "Good job you passed level ";
+                    char buffer[4];
+                    itoa(current, buffer, 10);
+                    strcat(level, buffer);
                     TextToSpeech.say(level);
                     delay(2000);
                  }
@@ -139,6 +139,16 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly
 
+  char myBuffer[15];
+  float latitude = GPS.getLatitude();
+  float longitude = GPS.getLongitude();
+  dtostrf(latitude, 13, 7, myBuffer);
+  myRequest1.addRawData(myBuffer);
+  dtostrf(longitude, 13, 7, myBuffer);
+  myRequest2.addRawData(myBuffer);
+  Internet.performPut(myRequest1);
+  Internet.performPut(myRequest2);
+
   //turnOnLight();
   //delay(2000);
 
@@ -162,12 +172,12 @@ void loop() {
     Internet.performPut(myRequest4);
   }*/
 
-  if(digitalRead(gamePin) == HIGH){
+  /*if(digitalRead(gamePin) == HIGH){
     TextToSpeech.say("Entered");
     VoiceRecognition.start();
     digitalWrite(gamePin, LOW);
     delay(10000);
-  }
+  }*/
 
   //Voice Recognition Section
   if(VoiceRecognition.isNewCommandReceived()){
@@ -175,29 +185,46 @@ void loop() {
       digitalWrite(heatGndPin,LOW);
 
       if(!gameOnBool){
-    		if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {  
-    		  /* Turn on the LED. */
-    		  digitalWrite(lightLedPin,HIGH);
-    		  TextToSpeech.say("Lights are on");
+        if(!strcmp(lightsOnCommand,VoiceRecognition.getLastCommand())) {  
+          /* Turn on the LED. */
+          digitalWrite(lightLedPin,HIGH);
+          TextToSpeech.say("Lights are on");
           delay(2000);
-    		} else if (!strcmp(lightsOffCommand,VoiceRecognition.getLastCommand())) {
-    		  /* Turn off the LED. */
-    		  digitalWrite(lightLedPin,LOW);
-    		  TextToSpeech.say("Lights are off");
-    		}
+        } else if (!strcmp(lightsOffCommand,VoiceRecognition.getLastCommand())) {
+          /* Turn off the LED. */
+          digitalWrite(lightLedPin,LOW);
+          TextToSpeech.say("Lights are off");
+        }
     
-    		if(!strcmp(heatingOnCommand,VoiceRecognition.getLastCommand())) {
-    		  digitalWrite(heatLedPin,HIGH);
-    		  TextToSpeech.say("Heating is on");
-    		} else if (!strcmp(heatingOffCommand,VoiceRecognition.getLastCommand())) {
-    		  digitalWrite(heatLedPin,LOW);
-    		  TextToSpeech.say("Heating is off");
-    		}
-
-        if(!strcmp("call",VoiceRecognition.getLastCommand())) {
-          Phone.call("0873845770");
+        if(!strcmp(heatingOnCommand,VoiceRecognition.getLastCommand())) {
+          digitalWrite(heatLedPin,HIGH);
+          TextToSpeech.say("Heating is on");
+        } else if (!strcmp(heatingOffCommand,VoiceRecognition.getLastCommand())) {
+          digitalWrite(heatLedPin,LOW);
+          TextToSpeech.say("Heating is off");
         }
 
+        if(!strcmp("call help",VoiceRecognition.getLastCommand())) {
+          Phone.call("0873845770");
+        }
+        if(!strcmp("call four star pizza",VoiceRecognition.getLastCommand())) {
+          Phone.call("0214274555");
+        }
+        if(!strcmp("call domino pizza",VoiceRecognition.getLastCommand())) {
+          Phone.call("0214274555");
+        }
+        if(!strcmp("call cork taxi",VoiceRecognition.getLastCommand())) {
+          Phone.call("0214272222");
+        }
+        if(!strcmp("call n r c taxi",VoiceRecognition.getLastCommand())) {
+          Phone.call("6772222");
+        }
+        if(!strcmp("call lidl",VoiceRecognition.getLastCommand())) {
+          Phone.call("1800991828");
+        }
+        if(!strcmp("call tesco",VoiceRecognition.getLastCommand())) {
+          Phone.call("0080000225533");
+        }
         if(!strcmp(gameOn,VoiceRecognition.getLastCommand())){
           TextToSpeech.say("Please choose a difficulty. One or two.");
           delay(2000);
@@ -220,35 +247,35 @@ void loop() {
         if(easyMode){
           if(!strcmp(gameEasy,VoiceRecognition.getLastCommand())) {
             current++;
-      			if(current == 5) {
-        			TextToSpeech.say("Good job. You won");
-        			delay(2000);
-        			strcpy(gameEasy, "one");
-        			current = -1;
-        			alreadyEntered = false;
-        			int i;
+            if(current == 5) {
+              TextToSpeech.say("Good job. You won");
+              delay(2000);
+              strcpy(gameEasy, "one");
+              current = -1;
+              alreadyEntered = false;
+              int i;
               gameOnBool = false;
   
-        			for(i = 0; i < 3; i++){
-        			  alreadyDone[i] = -1;
-        			}     
-      			
-      			} else {
-      			  easy();
-      			}
-      		} else{
-      			TextToSpeech.say("That was incorrect. You lose.");
-      			delay(2000);
-      			strcpy(gameEasy, "one");
-      			current = -1;
+              for(i = 0; i < 3; i++){
+                alreadyDone[i] = -1;
+              }     
+            
+            } else {
+              easy();
+            }
+          } else{
+            TextToSpeech.say("That was incorrect. You lose.");
+            delay(2000);
+            strcpy(gameEasy, "one");
+            current = -1;
             gameOnBool = false;
             alreadyEntered = false;
             easyMode = false;
-      			int i;
-      			for(i = 0; i < 3; i++){
-      			  alreadyDone[i] = -1;
-      			}    
-      		}
+            int i;
+            for(i = 0; i < 3; i++){
+              alreadyDone[i] = -1;
+            }    
+          }
         }
        //Hard Mode
        if(hardMode){
