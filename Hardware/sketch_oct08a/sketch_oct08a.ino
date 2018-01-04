@@ -11,7 +11,6 @@
 //Code to put longitude and latitude to firebase
 HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/latitude.json");
 HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.json");
-HttpRequest myRequest3("http://api.openweathermap.org/data/2.5/weather?id=2965139&appid=96eda09f98bc52edc930862d49636111");
 //HttpRequest myRequest3("https://rd-year-group-project.firebaseio.com/1Sheeld.json");
 //HttpRequest myRequest4("https://rd-year-group-project.firebaseio.com/1Sheeld/Game.json");
 //HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2/Lights.json");
@@ -27,7 +26,6 @@ const char lightsOnCommand[] = "lights on";
 const char lightsOffCommand[] = "lights off";
 const char heatingOnCommand[] = "heating on";
 const char heatingOffCommand[] = "heating off";
-const char weatherCommand[] = "weather";
 char gameOn[MAX] = "game on";
 char gameEasy[MAX] = "one";
 char gameHard[100] = "two";
@@ -41,26 +39,6 @@ char animals[4][20] = {"cow", "horse", "pig", "chicken"};
 int alreadyDone[3];
 int current = -1;
 int gameStart = -1;
-
-void onSuccess1(HttpResponse & response1)
-{
-  /* Using the response to query the Json chain till the required value. */
-  /* i.e. Get the value of 'main' in the first object of the array 'weather' in the response. */
-  /* Providing that the response is in JSON format. */
-       response1["weather"][0]["main"].query();
-delay(200);    
-}
-
-void onJsonReply1(JsonKeyChain & hell,char * output)
-{
-  if(hell == myRequest3.getResponse()["weather"][0]["main"])
-  {
-   TextToSpeech.say("the weather today in cork is");
-  delay(2000);
-  /* 1Sheeld responds using text-to-speech shield. */
-  TextToSpeech.say(output);
-    } 
-}
 
 void easy(){
   //Game Section
@@ -207,13 +185,6 @@ void loop() {
           digitalWrite(lightLedPin,LOW);
           TextToSpeech.say("Lights are off");
         }
-        if(!strcmp(weatherCommand,VoiceRecognition.getLastCommand()))
-        {
-          Internet.performGet(myRequest3);
-           /* Wait for 5 seconds. */
-          OneSheeld.delay(5000);
-        }
-
     
         if(!strcmp(heatingOnCommand,VoiceRecognition.getLastCommand())) {
           digitalWrite(heatLedPin,HIGH);
