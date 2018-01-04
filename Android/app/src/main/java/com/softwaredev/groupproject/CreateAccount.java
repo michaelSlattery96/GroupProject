@@ -111,7 +111,7 @@ public class CreateAccount extends AppCompatActivity {
                                                       patients.child("Phone Number").setValue(phoneNo);
                                                       patients.child("Date of Birth").setValue(dateOfBirth);
                                                       patients.child("Eircode").setValue(eircode);
-                                                      patients.child("patientID").setValue(patientId);
+                                                      patients.child("PatientID").setValue(patientId);
                                                       patients.child("Left Geo").setValue("false");
                                                       patients.child("CarerID").setValue(carerId);
                                                       patients.child("Carer Name").setValue(carerName);

@@ -9,8 +9,8 @@
  
 #include <OneSheeld.h>
 //Code to put longitude and latitude to firebase
-HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/latitude.json");
-HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/longitude.json");
+HttpRequest myRequest1("https://rd-year-group-project.firebaseio.com/GPS/latitude.json");
+HttpRequest myRequest2("https://rd-year-group-project.firebaseio.com/GPS/longitude.json");
 //HttpRequest myRequest3("https://rd-year-group-project.firebaseio.com/1Sheeld.json");
 //HttpRequest myRequest4("https://rd-year-group-project.firebaseio.com/1Sheeld/Game.json");
 //HttpRequest lightsRequest("https://rd-year-group-project.firebaseio.com/users/Patients/Patient2/Lights.json");
@@ -139,6 +139,16 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly
 
+  char myBuffer[15];
+  float latitude = GPS.getLatitude();
+  float longitude = GPS.getLongitude();
+  dtostrf(latitude, 13, 7, myBuffer);
+  myRequest1.addRawData(myBuffer);
+  dtostrf(longitude, 13, 7, myBuffer);
+  myRequest2.addRawData(myBuffer);
+  Internet.performPut(myRequest1);
+  Internet.performPut(myRequest2);
+
   //turnOnLight();
   //delay(2000);
 
@@ -162,12 +172,12 @@ void loop() {
     Internet.performPut(myRequest4);
   }*/
 
-  if(digitalRead(gamePin) == HIGH){
+  /*if(digitalRead(gamePin) == HIGH){
     TextToSpeech.say("Entered");
     VoiceRecognition.start();
     digitalWrite(gamePin, LOW);
     delay(10000);
-  }
+  }*/
 
   //Voice Recognition Section
   if(VoiceRecognition.isNewCommandReceived()){
@@ -203,44 +213,17 @@ void loop() {
         if(!strcmp("call domino pizza",VoiceRecognition.getLastCommand())) {
           Phone.call("0214274555");
         }
-        if(!strcmp("call lemon tree",VoiceRecognition.getLastCommand())) {
-          Phone.call("0214966896");
-        }
-        if(!strcmp("call jumbo",VoiceRecognition.getLastCommand())) {
-          Phone.call("0214395255");
-        }
-        if(!strcmp("call golden elephant",VoiceRecognition.getLastCommand())) {
-          Phone.call("0214895697");
-        }
         if(!strcmp("call cork taxi",VoiceRecognition.getLastCommand())) {
           Phone.call("0214272222");
         }
         if(!strcmp("call n r c taxi",VoiceRecognition.getLastCommand())) {
           Phone.call("6772222");
         }
-        if(!strcmp("call Galway Taxis",VoiceRecognition.getLastCommand())) {
-          Phone.call("061415566");
-        }
-        if(!strcmp("call treaty cabs",VoiceRecognition.getLastCommand())) {
-          Phone.call("018202020");
-        }
-        if(!strcmp("call link taxi",VoiceRecognition.getLastCommand())) {
-          Phone.call("0214496797");
-        }
         if(!strcmp("call lidl",VoiceRecognition.getLastCommand())) {
           Phone.call("1800991828");
         }
         if(!strcmp("call tesco",VoiceRecognition.getLastCommand())) {
           Phone.call("0080000225533");
-        }
-        if(!strcmp("call aldi",VoiceRecognition.getLastCommand())) {
-          Phone.call("1890253185");
-        }
-        if(!strcmp("call dunnes stores",VoiceRecognition.getLastCommand())) {
-          Phone.call("1800201080");
-        }
-        if(!strcmp("call super value",VoiceRecognition.getLastCommand())) {
-          Phone.call("1890456828");
         }
         if(!strcmp(gameOn,VoiceRecognition.getLastCommand())){
           TextToSpeech.say("Please choose a difficulty. One or two.");
